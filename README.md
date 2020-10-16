@@ -15,5 +15,5 @@ WebApp UI
 ![alt text](https://github.com/vipin-tech/kafka-streams-realtime-maps/blob/main/templates/bustrack.jpg)
 
 
-*Below is the screenshot of the webapp which is to track Dublin buses in real time. I am tracking the bus routes 4 (Monkstown-Harristown) and 39a (UCD Belfield - Ongar)*
+*Above is the screenshot of the webapp which is to track Dublin buses in real time. I am tracking the bus routes 4 (Monkstown-Harristown) and 39a (UCD Belfield - Ongar)*
 
