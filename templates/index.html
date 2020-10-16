@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <meta charset="utf-8">
+    <!-- LEAFLET -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin="">
+
+  </script>
+  <!-- END LEAFLET -->
+
+<title>Dublin Live Map</title>
+ </head>
+
+<body>
+    <h1>Dublin Bus Live Map</h1>
+    <!-- LEAFLET -->
+    <div id="mapid" style = "width:900px; height:580px;"></div>
+
+     <script>
+           var greenIcon = L.icon({
+                    iconUrl: 'dublinbus.jpeg',
+                    iconSize:     [38, 95], // size of the icon
+                    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                    });
+
+            var mymap = L.map('mapid').setView([53.3498, -6.2603], 10);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoidmlwaW5zciIsImEiOiJja2djaWlnb3owbnJoMnlxYTE0eno0dG8wIn0.fEUVRT2GPLwmxErRaJBbOA'
+            }).addTo(mymap);
+
+            mapMarkers1 = [];
+            mapMarkers2 = [];
+
+            var source = new EventSource('/topic/busdata'); //ENTER YOUR TOPICNAME HERE
+            source.addEventListener('message', function(e){
+
+              console.log('Message');
+              obj = JSON.parse(e.data);
+              console.log(obj);
+
+              if(obj.busline == '4') {
+                for (var i = 0; i < mapMarkers1.length; i++) {
+                  mymap.removeLayer(mapMarkers1[i]);
+                }
+                marker1 = L.marker([obj.latitude, obj.longitude]).addTo(mymap, {icon: greenIcon}).bindTooltip("4").openTooltip();
+                mapMarkers1.push(marker1);
+              }
+
+              if(obj.busline == '39a') {
+                for (var i = 0; i < mapMarkers2.length; i++) {
+                  mymap.removeLayer(mapMarkers2[i]);
+                }
+                marker2 = L.marker([obj.latitude, obj.longitude]).addTo(mymap, {icon: greenIcon}).bindTooltip("39a").openTooltip();
+                mapMarkers2.push(marker2);
+              }
+            }, false);
+        </script>
+    <!-- END LEAFLET -->
+ </body>
+</html>
